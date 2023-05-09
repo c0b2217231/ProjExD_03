@@ -114,7 +114,7 @@ class Beam:
     """
     def __init__(self, bird: Bird):
         
-        self._img = pg.transform.rotozoom(pg.image.load(f"ex03/fig/beam.png"),0, 2.0) # 左右反転
+        self._img = pg.transform.rotozoom(pg.image.load(f"ex03/fig/beam.png"),0, 2.0)
         self._rct = self._img.get_rect()  # 画像surfaceに対応したrect
         self._rct.left = bird._rct.right
         self._rct.centery = bird._rct.centery
@@ -175,6 +175,7 @@ def main():
             if bomb is not None and beam._rct.colliderect(bomb._rct):
                 beam = None
                 bomb = None
+                bird.change_img(6, screen)
         
         
         pg.display.update()
