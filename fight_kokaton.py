@@ -114,10 +114,10 @@ class Beam:
     """
     def __init__(self, bird: Bird):
         
-        self._img = pg.image.load("ex03/fig/beam.png")  # 左右反転
+        self._img = pg.transform.rotozoom(pg.image.load(f"ex03/fig/beam.png"),0, 2.0) # 左右反転
         self._rct = self._img.get_rect()  # 画像surfaceに対応したrect
         self._rct.left = bird._rct.right
-        self._rct.centerx = bird._rct.centery
+        self._rct.centery = bird._rct.centery
         self._vx, self._vy = +1, 0
         
         '''
@@ -151,23 +151,25 @@ def main():
                 return
             if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
                 beam = Beam(bird)
+
         tmr += 1
         screen.blit(bg_img, [0, 0])
+
         
         if bomb is not None: # 爆弾が存在している時
+            bomb.update(screen)
             if bird._rct.colliderect(bomb._rct):
                 # ゲームオーバー時に，こうかとん画像を切り替え，1秒間表示させる
                 bird.change_img(8, screen)
                 pg.display.update()
                 time.sleep(1)
                 return
-            bomb.update(screen)
-        
         
 
         key_lst = pg.key.get_pressed()
         bird.update(key_lst, screen)
-        bomb.update(screen)
+        
+        
         if beam is not None: #ビームが存在する時
             beam.update(screen)
             if bomb is not None and beam._rct.colliderect(bomb._rct):
