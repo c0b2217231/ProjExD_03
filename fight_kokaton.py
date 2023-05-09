@@ -42,7 +42,7 @@ class Bird:
         引数1 num：こうかとん画像ファイル名の番号
         引数2 xy：こうかとん画像の位置座標タプル
         """
-        
+
         img0 = pg.transform.rotozoom(pg.image.load(f"ex03/fig/{num}.png"), 0, 2.0)  # 左向き，2倍
         img1 = pg.transform.flip(img0, True, False)  # 右向き，2倍
         self._imgs = {
@@ -101,14 +101,14 @@ class Bomb:
         """
         爆弾円Surfaceを生成する
         """
-        rad = random.randint(10, 50)
-        color = random.choice(Bomb._colors)
+        rad = random.randint(10, 50) 
+        color = random.choice(Bomb._colors) #爆弾の色をランダムに選択
         self._img = pg.Surface((2*rad, 2*rad))
         pg.draw.circle(self._img, color, (rad, rad), rad)
-        self._img.set_colorkey((0, 0, 0))
+        self._img.set_colorkey((0, 0, 0)) # 初期
         self._rct = self._img.get_rect()
         self._rct.center = random.randint(0, WIDTH), random.randint(0, HEIGHT)
-        self._vx, self._vy = random.choice(Bomb._dires), random.choice(Bomb._dires)
+        self._vx, self._vy = random.choice(Bomb._dires), random.choice(Bomb._dires) # 位置もランダムに
 
     def update(self, screen: pg.Surface):
         """
@@ -151,14 +151,14 @@ class Score:
     スコアクラス
     """
     def __init__(self):
-        self._color = (0, 0, 0)
-        self._font = pg.font.Font(None, 50)
-        self._score = 0
-        self._img = self._font.render(f"SCORE:{self._score}", 0, self._color)
+        self._color = (0, 0, 0) # 文字のカラー設定
+        self._font = pg.font.Font(None, 50) # フォント設定
+        self._score = 0 # 初期点数
+        self._img = self._font.render(f"SCORE:{self._score}", 0, self._color) #表示するもの
         self._rct = self._img.get_rect()
         self._rct.center = 100, HEIGHT-50
 
-    def add_score(self):
+    def add_score(self): # 当てるたびに点数を追加
         self._score += 1
 
     def update(self, screen: pg.Surface):
