@@ -6,7 +6,7 @@ import pygame as pg
 
 
 WIDTH = 1600  # ゲームウィンドウの幅
-HEIGHT = 900  # ゲームウィンドウの高さ
+HEIGHT = 800  # ゲームウィンドウの高さ
 NUM_OF_BOMBS = 5  # 爆弾の数
 
 
@@ -57,6 +57,8 @@ class Bird:
         self._img = self._imgs[(+1, 0)]   # デフォルトで右      
         self._rct = self._img.get_rect()
         self._rct.center = xy
+
+
 
     def change_img(self, num: int, screen: pg.Surface):
         """
@@ -143,6 +145,26 @@ class Beam:
         self._rct.move_ip(self._vx, self._vy)
         screen.blit(self._img, self._rct)
 
+class Score:
+    """
+    スコアクラス
+    """
+    def __init__(self):
+        self._color = (0, 0, 0)
+        self._font = pg.font.Font(None, 50)
+        self._score = 0
+        self._img = self._font.render(f"SCORE:{self._score}", 0, self._color)
+        self._rct = self._img.get_rect()
+        self._rct.center = 100, HEIGHT-50
+
+    def add_score(self):
+        self._score += 1
+
+    def update(self, screen: pg.Surface):
+        self._img = self._font.render(f"SCORE:{self._score}", 0, self._color)
+        screen.blit(self._img, self._rct)
+
+
 
 def main():
     pg.display.set_caption("たたかえ！こうかとん")
@@ -153,7 +175,8 @@ def main():
     bird = Bird(3, (900, 400))
     bombs = [Bomb() for _ in range(NUM_OF_BOMBS)]
     beam = None
-
+    score = Score()
+    score.update(screen)
     tmr = 0
     while True:
         for event in pg.event.get():
@@ -171,6 +194,7 @@ def main():
             if bird._rct.colliderect(bomb._rct):
                 # ゲームオーバー時に，こうかとん画像を切り替え，1秒間表示させる
                 bird.change_img(8, screen)
+                score.update(screen)
                 pg.display.update()
                 time.sleep(1)
                 return
@@ -185,8 +209,10 @@ def main():
                     beam = None
                     del bombs[i]
                     bird.change_img(6, screen)
+                    score.add_score()
                     break
-
+        
+        score.update(screen)
         pg.display.update()
         clock.tick(1000)
 
